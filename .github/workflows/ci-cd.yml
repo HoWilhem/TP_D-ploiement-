@@ -57,12 +57,12 @@ jobs:
               echo "Docker déjà installé"
             fi
 
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/travelnow:latest
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/travelnow:latest
 
-            docker stop travelnow || true
-            docker rm travelnow || true
+            sudo docker stop travelnow || true
+            sudo docker rm travelnow || true
 
-            docker run -d \
+            sudo docker run -d \
               --name travelnow \
               -p 80:3000 \
               --restart unless-stopped \
