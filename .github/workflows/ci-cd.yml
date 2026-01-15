@@ -64,7 +64,7 @@ jobs:
 
             sudo docker run -d \
               --name travelnow \
-              -p 80:3000 \
+              -p 80:3001 \
               --restart unless-stopped \
               ${{ secrets.DOCKERHUB_USERNAME }}/travelnow:latest
 
