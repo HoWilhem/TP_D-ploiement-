@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TravelNow</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="navbar">
+        <span class="logo">🌍 TravelNow</span>
+      </nav>
+
+      <div class="hero-content">
+        <h1>Explorez le monde</h1>
+        <p>Découvrez des destinations uniques partout sur la planète</p>
+      </div>
+    </header>
+
+    <section class="map-section">
+      <h2>Carte des destinations</h2>
+      <div id="map"></div>
+    </section>
+
+    <section class="destinations-section">
+      <h2>Destinations populaires</h2>
+      <main id="destinations"></main>
+    </section>
+
+    <footer>
+      <p>© 2026 TravelNow · Voyagez autrement</p>
+    </footer>
+
+    <!-- Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
