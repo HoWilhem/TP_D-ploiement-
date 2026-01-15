@@ -1,6 +1,6 @@
-# TravelNow - Plateforme de Découverte de Destinations
+# TP — CI/CD complet : Tests → Docker Hub → Déploiement sur VM Azure
 
-Application web full-stack permettant de découvrir des destinations touristiques avec une carte interactive et une interface utilisateur intuitive.
+Le projet consiste à développer un site web avec Docker et à faire passer les tests CI/CD. Ensuite, le site est déployé sur une machine virtuelle Azure en utilisant Docker Hub. Grâce à GitHub Actions, la publication de l’image Docker sur Docker Hub et le déploiement sur la VM se font automatiquement une fois que les tests sont réussis. Le site web a pour thème le tourisme : le front-end est développé avec HTML, CSS et JavaScript, et le back-end avec Express.js.
 
 ## 📋 Table des matières
 
@@ -26,7 +26,7 @@ Application web full-stack permettant de découvrir des destinations touristique
 **Stack Technique :**
 
 - **Backend** : Node.js + Express
-- **Frontend** : HTML5, CSS3, JavaScript vanilla + Leaflet.js (pour les cartes)
+- **Frontend** : HTML5, CSS3, JavaScript + Leaflet.js (pour les cartes)
 - **Conteneurisation** : Docker
 - **CI/CD** : GitHub Actions
 - **Déploiement** : Azure VM + Docker Hub
@@ -62,7 +62,6 @@ TP_Deploiment/
   - `GET /health` - Healthcheck de l'application
   - `GET /api/destinations` - Liste des destinations touristiques
 - Sert les fichiers frontend en statique
-- Supporte les variables d'environnement pour le port
 
 ### Frontend - `frontend/`
 
@@ -80,17 +79,6 @@ TP_Deploiment/
 - **Node.js** 20+ ([télécharger](https://nodejs.org/))
 - **Docker** (optionnel, pour conteneurisation)
 - **Git**
-
-### Installation des dépendances
-
-```bash
-# Cloner le repository
-git clone <repository-url>
-cd TP_Deploiment
-
-# Installer les dépendances
-npm ci
-```
 
 **Dépendances principales :**
 
@@ -233,13 +221,16 @@ docker push <DOCKERHUB_USERNAME>/travelnow:latest
 
 #### 6️⃣ **Déploiement sur Azure**
 
+Installer docker sur la VM Azure
+
 ```bash
-docker pull <IMAGE>
-docker stop travelnow || true
-docker rm travelnow || true
-docker run -d --name travelnow -p 80:3000 --restart unless-stopped <IMAGE>
+sudo docker pull <IMAGE>
+sudo docker stop travelnow || true
+sudo docker rm travelnow || true
+sudo docker run -d --name travelnow -p 80:3000 --restart unless-stopped <IMAGE>
 ```
 
+- sudo pour avoir le droit d'utiliser docker
 - Récupère la dernière image
 - Arrête et supprime l'ancien conteneur (si existe)
 - Lance le nouveau conteneur sur le port 80 (HTTP)
@@ -254,48 +245,6 @@ curl --fail http://<AZURE_VM_HOST>/health
 Vérifie que le déploiement s'est bien déroulé
 
 ---
-
-## ☁️ Déploiement sur Azure
-
-### Prérequis
-
-#### 1. **Créer une VM Azure**
-
-```bash
-# Exemple avec Azure CLI
-az vm create \
-  --resource-group <RG_NAME> \
-  --name travelnow-vm \
-  --image UbuntuLTS \
-  --admin-username azureuser \
-  --generate-ssh-keys
-```
-
-#### 2. **Installer Docker sur la VM**
-
-```bash
-# SSH dans la VM
-ssh azureuser@<PUBLIC_IP>
-
-# Installer Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-# Ajouter l'utilisateur au groupe docker
-sudo usermod -aG docker $USER
-```
-
-#### 3. **Configurer les secrets GitHub**
-
-Dans le repository GitHub, aller à **Settings > Secrets and variables > Actions** et ajouter :
-
-| Secret               | Description                  | Exemple                              |
-| -------------------- | ---------------------------- | ------------------------------------ |
-| `DOCKERHUB_USERNAME` | Nom d'utilisateur Docker Hub | `88wiwi`                             |
-| `DOCKERHUB_TOKEN`    | Token Docker Hub             | `dckr_pat_...`                       |
-| `AZURE_VM_HOST`      | Adresse IP ou DNS de la VM   | `20.123.45.67`                       |
-| `AZURE_VM_USER`      | Utilisateur SSH sur la VM    | `azureuser`                          |
-| `AZURE_VM_SSH_KEY`   | Clé SSH privée (format PEM)  | `-----BEGIN RSA PRIVATE KEY-----...` |
 
 ### Workflow de Déploiement
 
@@ -320,61 +269,9 @@ Dans le repository GitHub, aller à **Settings > Secrets and variables > Actions
 Une fois le déploiement réussi, l'application est accessible sur :
 
 ```
-http://<AZURE_VM_HOST>/
+http://51.120.124.68/
 ```
 
-### Commandes Utiles sur la VM
+## Application fonctionnelle :
 
-```bash
-# Voir les logs du conteneur
-docker logs -f travelnow
-
-# Vérifier l'état du conteneur
-docker ps
-
-# Arrêter l'application
-docker stop travelnow
-
-# Redémarrer l'application
-docker restart travelnow
-
-# Supprimer le conteneur
-docker rm travelnow
-```
-
----
-
-## 📊 Variables d'Environnement
-
-| Variable | Default | Utilisé par              |
-| -------- | ------- | ------------------------ |
-| `PORT`   | `3001`  | Backend (backend/app.js) |
-
-Exemple pour démarrer sur un port personnalisé :
-
-```bash
-PORT=8080 npm start
-```
-
----
-
-## 🐛 Dépannage
-
-### Tests locaux échouent
-
-```bash
-# Effacer le cache npm
-npm cache clean --force
-
-# Réinstaller les dépendances
-rm -rf node_modules package-lock.json
-npm ci
-```
-
-### Cypress échoue en CI/CD
-
-- Assurer que l'app a suffisamment de temps pour démarrer (5 secondes)
-- Vérifier que le port 3001 n'est pas déjà utilisé
-- Vérifier les logs du CI dans GitHub Actions
-
----
+![ application fonctionnelle](img/image.png)
