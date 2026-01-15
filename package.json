@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node backend/app.js",
     "test": "jest --runInBand",
-    "test:e2e": "cypress open"
+    "test:e2e": "cypress run"
   },
   "keywords": [],
   "author": "",
