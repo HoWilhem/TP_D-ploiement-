@@ -4,6 +4,7 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
+COPY package.json package-lock.json ./
 # Copy backend package files and install dependencies
 RUN npm ci
 
