@@ -47,6 +47,16 @@ jobs:
           username: ${{ secrets.AZURE_VM_USER }}
           key: ${{ secrets.AZURE_VM_SSH_KEY }}
           script: |
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "Docker non trouvé, installation..."
+              sudo apt update
+              sudo apt install -y docker.io
+              sudo systemctl enable docker
+              sudo systemctl start docker
+            else
+              echo "Docker déjà installé"
+            fi
+
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/travelnow:latest
 
             docker stop travelnow || true
